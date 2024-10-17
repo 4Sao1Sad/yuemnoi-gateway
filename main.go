@@ -1,7 +1,5 @@
 package main
 
-// main.go
-
 import (
 	"fmt"
 	"net/http"
@@ -12,15 +10,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// Version ของ custom plugin ของเรานั้นเอง
 const Version = "0.1"
 
-// Priority เป็นการบอกว่า custom plugin ของเราจะถูกทำ
-// ในลำดับที่เท่าไหร่ของ Plugin ท้ังหมดที่เปิดการใช้งาน หากค่าของ Priority
-// มีค่าสูงสุด Custom Plugin นี้จะถูกทำก่อน ถ้ามีค่าต่ำสุดก็จะถูกทำที่หลัง
 const Priority = 1
 
-// main ตรงนี้ไม่มีไรเป็น start server custom plugin
 func main() {
 	server.StartServer(New, Version, Priority)
 }
@@ -34,15 +27,12 @@ type AuthTokenClaim struct {
 	jwt.RegisteredClaims
 }
 
-// Config ใช้ในการกำหนดค่าลงไปใน Custom Plugin ของเราซึ่งตรงนี้
-// สามารถกำหนดค่าผ่านทาง Kong Manager ได้ซึ่งเป็น Web สำหรับการบริหารจัดการ
 type Config struct {
 	Endpoint       string
 	CookieNameAuth string
 	Secret         string
 }
 
-// Access เป็นการ Implement Accessor Interface เพื่อจัดการ Request ที่วิ่งเข้ามา
 func (conf *Config) Access(kong *pdk.PDK) {
 	cookieHeader, _ := kong.Request.GetHeader("cookie")
 	cookies := getCookies(cookieHeader)
